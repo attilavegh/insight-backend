@@ -1,6 +1,5 @@
 package hu.vattila.insight.entity;
 
-import com.sun.istack.internal.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,15 +16,22 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class User implements Serializable {
+public class Account implements Serializable {
 
     @Id
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
+    private Integer googleId;
+
+    @Column
     @NotNull
-    private String name;
+    private String firstName;
+
+    @Column
+    @NotNull
+    private String lastName;
 
     @Column
     @NotNull

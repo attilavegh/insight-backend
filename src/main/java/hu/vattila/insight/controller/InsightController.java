@@ -1,7 +1,6 @@
 package hu.vattila.insight.controller;
 
 import hu.vattila.insight.entity.Insight;
-import hu.vattila.insight.entity.User;
 import hu.vattila.insight.repository.InsightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
