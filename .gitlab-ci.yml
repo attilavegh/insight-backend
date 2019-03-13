@@ -26,7 +26,7 @@ deploy_staging:
     - gem install dpl
     - dpl --provider=heroku --app=vattila-insight --api-key=$HEROKU_API_KEY
   environment:
-  name: staging
-  url: vattila-insight.herokuapp.com
+    name: staging
+    url: https://vattila-insight.herokuapp.com
   only:
     - master
