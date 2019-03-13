@@ -1,0 +1,32 @@
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - ./gradlew assemble
+  artifacts:
+    paths:
+      - build/libs/*.jar
+  only:
+    - master
+
+deploy_staging:
+  stage: deploy
+  image: ruby:2.3
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=vattila-insight --api-key=$HEROKU_API_KEY
+  environment:
+  name: staging
+  url: vattila-insight.herokuapp.com
+  only:
+    - master
