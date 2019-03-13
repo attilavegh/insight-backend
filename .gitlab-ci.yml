@@ -6,7 +6,7 @@ build:
   stage: build
   image: java:8-jdk
   script:
-    - ./gradlew build
+    - ./gradlew assemble
   artifacts:
     paths:
       - build/libs/*.jar
