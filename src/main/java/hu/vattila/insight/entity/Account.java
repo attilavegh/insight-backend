@@ -35,6 +35,10 @@ public class Account implements Serializable {
 
     @Column
     @NotNull
+    private String fullName;
+
+    @Column
+    @NotNull
     private String email;
 
     @Column

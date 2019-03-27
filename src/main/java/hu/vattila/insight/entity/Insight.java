@@ -32,6 +32,14 @@ public class Insight implements Serializable {
 
     @Column
     @NotNull
+    private String senderImage;
+
+    @Column
+    @NotNull
+    private String receiverImage;
+
+    @Column
+    @NotNull
     private String content;
 
     @Column

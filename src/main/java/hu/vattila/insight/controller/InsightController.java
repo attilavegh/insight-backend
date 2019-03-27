@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = {"http://vattila-insight.herokuapp.com", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/insight")
 public class InsightController {
@@ -15,15 +16,15 @@ public class InsightController {
     @Autowired
     InsightRepository insightRepository;
 
-    @GetMapping("/sent")
-    public ResponseEntity<List<Insight>> getSentInsights() {
-        List<Insight> insights = insightRepository.findAllBySenderId(1);
+    @GetMapping("/sent/{senderId}")
+    public ResponseEntity<List<Insight>> getSentInsights(@PathVariable("senderId") Integer senderId) {
+        List<Insight> insights = insightRepository.findAllBySenderId(senderId);
         return ResponseEntity.ok(insights);
     }
 
-    @GetMapping("/received")
-    public ResponseEntity<List<Insight>> getReceivedInsights() {
-        List<Insight> insights = insightRepository.findAllByReceiverId(1);
+    @GetMapping("/received/{receiverId}")
+    public ResponseEntity<List<Insight>> getReceivedInsights(@PathVariable("receiverId") Integer receiverId) {
+        List<Insight> insights = insightRepository.findAllByReceiverId(receiverId);
         return ResponseEntity.ok(insights);
     }
 

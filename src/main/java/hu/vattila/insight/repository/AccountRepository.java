@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<Account, Integer> {
-    Optional<Account> findByEmail(String email);
+public interface AccountRepository extends CrudRepository<Account, Integer> {
+    Optional<Account> findByGoogleId(Integer id);
     List<Account> findAllByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(String frag1, String frag2);
 }
