@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = {"http://vattila-insight.herokuapp.com", "http://localhost:4200"})
+@CrossOrigin(origins = {"https://elte-insight.firebaseapp.com", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/user")
 public class AccountController {

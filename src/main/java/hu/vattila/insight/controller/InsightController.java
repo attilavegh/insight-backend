@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {"http://vattila-insight.herokuapp.com", "http://localhost:4200"})
+@CrossOrigin(origins = {"https://elte-insight.firebaseapp.com", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/insight")
 public class InsightController {
