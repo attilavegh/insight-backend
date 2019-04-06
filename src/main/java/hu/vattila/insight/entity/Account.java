@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -23,7 +24,8 @@ public class Account implements Serializable {
     private Integer id;
 
     @Column
-    private Integer googleId;
+    @NotNull
+    private String googleId;
 
     @Column
     @NotNull
@@ -46,6 +48,6 @@ public class Account implements Serializable {
     private String imageUrl;
 
     @Column
-    @CreatedDate
+    @CreationTimestamp
     private Date registrationDate;
 }

@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AccountRepository extends CrudRepository<Account, Integer> {
-    Optional<Account> findByGoogleId(Integer id);
+    Optional<Account> findByGoogleId(String id);
     List<Account> findAllByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(String frag1, String frag2);
 }

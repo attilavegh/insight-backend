@@ -1,11 +1,17 @@
 package hu.vattila.insight.controller;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import hu.vattila.insight.entity.Account;
+import hu.vattila.insight.entity.SocialUser;
 import hu.vattila.insight.repository.AccountRepository;
+import hu.vattila.insight.utility.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +24,13 @@ public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
 
+    @ExceptionHandler({ Exception.class })
+    public ResponseEntity handleException(Exception exception) {
+        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping()
-    public ResponseEntity<List<Account>> searchUsers(@RequestParam String fragment) {
+    public ResponseEntity<List<Account>> searchAccount(@RequestParam String fragment) {
         if (fragment.equals("")) {
             return ResponseEntity.ok(Collections.emptyList());
         } else {
@@ -28,14 +39,31 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Account> login(@RequestBody Account account) {
-        Optional<Account> userOptional = accountRepository.findByGoogleId(account.getGoogleId());
+    @GetMapping("{id}")
+    public ResponseEntity<Account> getAccount(@PathVariable String id) {
+        Optional<Account> optionalAccount = accountRepository.findByGoogleId(id);
+        return optionalAccount.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
 
-        if (userOptional.isPresent()) {
+    @PostMapping("/login")
+    public ResponseEntity<Account> login(@RequestBody SocialUser socialUser) throws GeneralSecurityException, IOException {
+        GoogleIdToken token = Authentication.validateToken(socialUser.getIdToken());
+
+        if (token == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(accountRepository.save(account));
+        Optional<Account> optionalAccount = accountRepository.findByGoogleId(socialUser.getId());
+
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+
+            account.setImageUrl(socialUser.getPhotoUrl());
+            accountRepository.save(account);
+
+            return ResponseEntity.ok(account);
+        } else {
+            return ResponseEntity.ok(accountRepository.save(Authentication.createAccount(token)));
+        }
     }
 }
