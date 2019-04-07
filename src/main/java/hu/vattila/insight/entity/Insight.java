@@ -1,9 +1,7 @@
 package hu.vattila.insight.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -24,18 +22,22 @@ public class Insight implements Serializable {
 
     @Column
     @NotNull
+    @JsonAlias({ "sender_id" })
     private Integer senderId;
 
     @Column
     @NotNull
+    @JsonAlias({ "receiver_id" })
     private Integer receiverId;
 
     @Column
     @NotNull
+    @JsonAlias({ "sender_image" })
     private String senderImage;
 
     @Column
     @NotNull
+    @JsonAlias({ "receiver_image" })
     private String receiverImage;
 
     @Column

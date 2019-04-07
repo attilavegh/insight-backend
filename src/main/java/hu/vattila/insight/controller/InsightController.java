@@ -3,6 +3,7 @@ package hu.vattila.insight.controller;
 import hu.vattila.insight.entity.Insight;
 import hu.vattila.insight.repository.InsightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,11 @@ public class InsightController {
 
     @Autowired
     InsightRepository insightRepository;
+
+    @ExceptionHandler({ Exception.class })
+    public ResponseEntity handleException(Exception exception) {
+        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    }
 
     @GetMapping("/sent/{senderId}")
     public ResponseEntity<List<Insight>> getSentInsights(@PathVariable("senderId") Integer senderId) {

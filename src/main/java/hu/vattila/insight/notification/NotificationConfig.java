@@ -1,6 +1,5 @@
-package hu.vattila.insight;
+package hu.vattila.insight.notification;
 
-import hu.vattila.insight.utility.NotificationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

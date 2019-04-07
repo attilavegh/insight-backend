@@ -1,4 +1,4 @@
-package hu.vattila.insight;
+package hu.vattila.insight.config;
 
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
