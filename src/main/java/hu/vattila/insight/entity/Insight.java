@@ -1,6 +1,5 @@
 package hu.vattila.insight.entity;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 

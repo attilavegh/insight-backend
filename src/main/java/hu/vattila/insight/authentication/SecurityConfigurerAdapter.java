@@ -15,6 +15,7 @@ public class SecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/ws/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new TokenFilter(authenticationManager()))
