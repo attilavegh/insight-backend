@@ -22,29 +22,17 @@ public class Insight implements Serializable {
 
     @Column
     @NotNull
-    @JsonAlias({ "sender_id" })
-    private Integer senderId;
-
-    @Column
-    @NotNull
-    @JsonAlias({ "receiver_id" })
-    private Integer receiverId;
-
-    @Column
-    @NotNull
-    @JsonAlias({ "sender_image" })
-    private String senderImage;
-
-    @Column
-    @NotNull
-    @JsonAlias({ "receiver_image" })
-    private String receiverImage;
-
-    @Column
-    @NotNull
     private String content;
 
     @Column
     @CreatedDate
     private Date date;
+
+    @ManyToOne
+    @JoinColumn(name="sender", referencedColumnName = "googleId", nullable=false)
+    private Account sender;
+
+    @ManyToOne
+    @JoinColumn(name="receiver", referencedColumnName = "googleId", nullable=false)
+    private Account receiver;
 }

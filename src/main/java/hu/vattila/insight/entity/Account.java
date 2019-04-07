@@ -1,5 +1,6 @@
 package hu.vattila.insight.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Data
@@ -50,4 +52,12 @@ public class Account implements Serializable {
     @Column
     @CreationTimestamp
     private Date registrationDate;
+
+    @JsonIgnore
+    @OneToMany(mappedBy="sender")
+    private Set<Insight> sentInsights;
+
+    @JsonIgnore
+    @OneToMany(mappedBy="receiver")
+    private Set<Insight> receivedInsights;
 }
