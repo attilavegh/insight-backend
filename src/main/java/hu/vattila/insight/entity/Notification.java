@@ -1,5 +1,6 @@
 package hu.vattila.insight.entity;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,10 @@ import java.util.Date;
 @EqualsAndHashCode
 public class Notification {
     private Integer id;
-    private String content;
+    @JsonAlias({"continue_message"})
+    private String continueMessage;
+    @JsonAlias({"consider_message"})
+    private String considerMessage;
     private Date date;
     private String sender;
     private String receiver;

@@ -21,8 +21,12 @@ import java.util.Optional;
 @RequestMapping("/api/user")
 public class AccountController {
 
+    private final AccountRepository accountRepository;
+
     @Autowired
-    private AccountRepository accountRepository;
+    public AccountController(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     @ExceptionHandler({ Exception.class })
     public ResponseEntity handleException(Exception exception) {

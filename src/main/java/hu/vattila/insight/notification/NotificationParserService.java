@@ -27,7 +27,8 @@ class NotificationParserService {
 
         Insight insight = new Insight();
         insight.setId(notification.getId());
-        insight.setContent(notification.getContent());
+        insight.setContinueMessage(notification.getContinueMessage());
+        insight.setConsiderMessage(notification.getConsiderMessage());
         insight.setDate(notification.getDate());
 
         Account sender = getAccount(notification.getSender());

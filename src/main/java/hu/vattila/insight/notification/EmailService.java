@@ -12,8 +12,12 @@ import javax.mail.internet.MimeMessage;
 @Service
 class EmailService {
 
+    private final JavaMailSender mailSender;
+
     @Autowired
-    private JavaMailSender mailSender;
+    public EmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     void send(Insight insight) {
         MimeMessage message = mailSender.createMimeMessage();
@@ -22,8 +26,8 @@ class EmailService {
         try {
             helper.setFrom(new InternetAddress("elte.insight@gmail.com", "Insight"));
             helper.setTo(insight.getReceiver().getEmail());
-            helper.setSubject("You've got a new insight!");
-            helper.setText(insight.getContent());
+            helper.setSubject("You've got a new Insight!");
+            helper.setText(insight.getContinueMessage() + " <br> " + insight.getConsiderMessage(), true);
         } catch (Exception e) {
             return;
         }

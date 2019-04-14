@@ -1,7 +1,7 @@
 package hu.vattila.insight.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,10 +21,13 @@ public class Insight implements Serializable {
 
     @Column
     @NotNull
-    private String content;
+    private String continueMessage;
 
     @Column
-    @CreatedDate
+    private String considerMessage;
+
+    @Column
+    @CreationTimestamp
     private Date date;
 
     @ManyToOne
