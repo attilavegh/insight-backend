@@ -3,7 +3,7 @@ package hu.vattila.insight.notification;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.vattila.insight.entity.Account;
 import hu.vattila.insight.entity.Insight;
-import hu.vattila.insight.entity.Notification;
+import hu.vattila.insight.model.Notification;
 import hu.vattila.insight.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
 package hu.vattila.insight.authentication;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,46 +20,30 @@ public class TokenFilter extends BasicAuthenticationFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req,
-                                    HttpServletResponse res,
-                                    FilterChain chain) throws IOException, ServletException {
-        String header = req.getHeader(SecurityConstants.AUTHORIZATION_HEADER.getValue());
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        String token = req.getHeader(AuthConstants.AUTHORIZATION_HEADER_NAME.getValue());
 
-        if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX.getValue())) {
+        if (token == null || !AuthUtils.isAuthToken(token)) {
             chain.doFilter(req, res);
             return;
         }
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+        UsernamePasswordAuthenticationToken authentication = authenticate(token);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(req, res);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(SecurityConstants.AUTHORIZATION_HEADER.getValue());
-
-        if (token != null) {
-            String user;
-
-            try {
-                user = GoogleAuthenticationVerifier
-                        .validateToken(token)
-                        .getPayload()
-                        .getSubject();
-
-            } catch (Exception e) {
-                return null;
-            }
-
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-            }
-
-            return null;
-        }
-
-        return null;
+    private UsernamePasswordAuthenticationToken authenticate(String token) {
+        return isAuthTokenValid(token) ? grantAccess(token) : null;
     }
 
+    private boolean isAuthTokenValid(String token) {
+        GoogleIdToken verifiedToken = TokenHandler.verifyToken(token);
+        return verifiedToken != null;
+    }
+
+    private UsernamePasswordAuthenticationToken grantAccess(String token) {
+        return new UsernamePasswordAuthenticationToken(token, null, new ArrayList<>());
+    }
 }

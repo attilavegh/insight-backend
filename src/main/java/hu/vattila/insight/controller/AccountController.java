@@ -1,15 +1,20 @@
 package hu.vattila.insight.controller;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import hu.vattila.insight.authentication.GoogleAuthenticationVerifier;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import hu.vattila.insight.authentication.AuthConstants;
+import hu.vattila.insight.authentication.AuthUtils;
+import hu.vattila.insight.authentication.TokenHandler;
 import hu.vattila.insight.entity.Account;
-import hu.vattila.insight.entity.SocialUser;
+import hu.vattila.insight.model.OneTimeAuthCode;
+import hu.vattila.insight.model.Token;
 import hu.vattila.insight.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
@@ -28,7 +33,7 @@ public class AccountController {
         this.accountRepository = accountRepository;
     }
 
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({Exception.class})
     public ResponseEntity handleException(Exception exception) {
         return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
     }
@@ -41,7 +46,7 @@ public class AccountController {
         } else {
             List<Account> accounts = accountRepository.findAllByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(fragment, fragment);
 
-            String userId = GoogleAuthenticationVerifier.extractGoogleId(token);
+            String userId = AuthUtils.extractGoogleId(token);
             accounts.removeIf(account -> account.getGoogleId().equals(userId));
 
             return ResponseEntity.ok(accounts);
@@ -51,7 +56,7 @@ public class AccountController {
     @GetMapping("{id}")
     public ResponseEntity<Account> getAccount(@PathVariable String id,
                                               @RequestHeader("Authorization") String token) throws GeneralSecurityException, IOException {
-        String authorizedGoogleId = GoogleAuthenticationVerifier.extractGoogleId(token);
+        String authorizedGoogleId = AuthUtils.extractGoogleId(token);
         if (!authorizedGoogleId.equals(id)) {
             return ResponseEntity.badRequest().build();
         }
@@ -61,24 +66,50 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Account> login(@RequestBody SocialUser socialUser) throws GeneralSecurityException, IOException {
-        GoogleIdToken token = GoogleAuthenticationVerifier.validateToken(socialUser.getIdToken());
+    public ResponseEntity<Token> login(@RequestBody OneTimeAuthCode authCode) throws IOException {
 
-        if (token == null) {
+        if (authCode == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<Account> optionalAccount = accountRepository.findByGoogleId(socialUser.getId());
+        GoogleTokenResponse tokenResponse = TokenHandler.exchangeAuthorizationCode(authCode);
 
-        if (optionalAccount.isPresent()) {
-            Account account = optionalAccount.get();
+        GoogleIdToken parsedIdToken = tokenResponse.parseIdToken();
+        String googleId = parsedIdToken.getPayload().getSubject();
+        String imageUrl = parsedIdToken.getPayload().get("picture").toString();
 
-            account.setImageUrl(socialUser.getPhotoUrl());
-            accountRepository.save(account);
+        Optional<Account> existingOptionalAccount = accountRepository.findByGoogleId(googleId);
 
-            return ResponseEntity.ok(account);
+        if (existingOptionalAccount.isPresent()) {
+            Account existingAccount = existingOptionalAccount.get();
+            existingAccount.setImageUrl(imageUrl);
+
+            accountRepository.save(existingAccount);
         } else {
-            return ResponseEntity.ok(accountRepository.save(GoogleAuthenticationVerifier.createAccount(token)));
+            Account newAccount = AuthUtils.createAccount(tokenResponse.parseIdToken());
+            accountRepository.save(newAccount);
         }
+
+        String refreshToken = tokenResponse.getRefreshToken();
+        String idToken = tokenResponse.getIdToken();
+
+        return ResponseEntity.ok(new Token(idToken, refreshToken));
     }
+
+    @PostMapping("/refresh_token")
+    public ResponseEntity<Token> login(@RequestBody Token token) {
+
+        if (token == null || token.getRefreshToken() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String refreshedToken = getRefreshedAuthToken(token.getRefreshToken());
+        return refreshedToken != null ? ResponseEntity.ok(new Token(refreshedToken, token.getRefreshToken())) : ResponseEntity.badRequest().build();
+    }
+
+    private String getRefreshedAuthToken(String token) {
+        GoogleTokenResponse tokenResponse = TokenHandler.refreshToken(token);
+        return tokenResponse != null ? tokenResponse.getIdToken() : null;
+    }
+
 }

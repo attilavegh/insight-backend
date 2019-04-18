@@ -1,6 +1,6 @@
 package hu.vattila.insight.controller;
 
-import hu.vattila.insight.authentication.GoogleAuthenticationVerifier;
+import hu.vattila.insight.authentication.AuthUtils;
 import hu.vattila.insight.entity.Account;
 import hu.vattila.insight.entity.Insight;
 import hu.vattila.insight.repository.AccountRepository;
@@ -35,16 +35,16 @@ public class InsightController {
     }
 
     @GetMapping("/sent/{senderId}")
-    public ResponseEntity<List<Insight>> getSentInsights(@PathVariable("senderId") Integer senderId,
+    public ResponseEntity<List<Insight>> getSentInsights(@PathVariable("senderId") String senderGoogleId,
                                                          @RequestHeader("Authorization") String token) throws GeneralSecurityException, IOException {
-        String authorizedGoogleId = GoogleAuthenticationVerifier.extractGoogleId(token);
+        String authorizedGoogleId = AuthUtils.extractGoogleId(token);
         Optional<Account> optionalAccount = accountRepository.findByGoogleId(authorizedGoogleId);
 
         if (optionalAccount.isPresent()) {
-            Integer accountId = optionalAccount.get().getId();
+            String accountGoogleId = optionalAccount.get().getGoogleId();
 
-            if (accountId.equals(senderId)) {
-                List<Insight> insights = insightRepository.findAllBySenderIdOrderByDateDesc(senderId);
+            if (accountGoogleId.equals(senderGoogleId)) {
+                List<Insight> insights = insightRepository.findAllBySenderGoogleIdOrderByDateDesc(senderGoogleId);
                 return ResponseEntity.ok(insights);
             }
         }
@@ -53,16 +53,16 @@ public class InsightController {
     }
 
     @GetMapping("/received/{receiverId}")
-    public ResponseEntity<List<Insight>> getReceivedInsights(@PathVariable("receiverId") Integer receiverId,
+    public ResponseEntity<List<Insight>> getReceivedInsights(@PathVariable("receiverId") String receiverId,
                                                              @RequestHeader("Authorization") String token) throws GeneralSecurityException, IOException {
-        String authorizedGoogleId = GoogleAuthenticationVerifier.extractGoogleId(token);
+        String authorizedGoogleId = AuthUtils.extractGoogleId(token);
         Optional<Account> optionalAccount = accountRepository.findByGoogleId(authorizedGoogleId);
 
         if (optionalAccount.isPresent()) {
-            Integer accountId = optionalAccount.get().getId();
+            String accountGoogleId = optionalAccount.get().getGoogleId();
 
-            if (accountId.equals(receiverId)) {
-                List<Insight> insights = insightRepository.findAllByReceiverIdOrderByDateDesc(receiverId);
+            if (accountGoogleId.equals(receiverId)) {
+                List<Insight> insights = insightRepository.findAllByReceiverGoogleIdOrderByDateDesc(receiverId);
                 return ResponseEntity.ok(insights);
             }
         }

@@ -1,4 +1,4 @@
-package hu.vattila.insight.entity;
+package hu.vattila.insight.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.AllArgsConstructor;

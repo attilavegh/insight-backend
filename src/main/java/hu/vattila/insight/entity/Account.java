@@ -2,12 +2,10 @@ package hu.vattila.insight.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -44,10 +42,6 @@ public class Account implements Serializable {
     @Column
     @NotNull
     private String imageUrl;
-
-    @Column
-    @CreationTimestamp
-    private Date registrationDate;
 
     @JsonIgnore
     @OneToMany(mappedBy="sender")
