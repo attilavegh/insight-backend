@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Transactional
 @Service
-class NotificationParserService {
+class NotificationDtoParserService {
 
     @Autowired
     private AccountRepository accountRepository;

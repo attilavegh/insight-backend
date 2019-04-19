@@ -15,10 +15,10 @@ public class NotificationListener {
     private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    private EmailService emailService;
+    private EmailNotificationService emailNotificationService;
 
     @Autowired
-    private NotificationParserService notificationParserService;
+    private NotificationDtoParserService notificationDtoParserService;
 
     private PGConnection pgConnection;
 
@@ -29,14 +29,12 @@ public class NotificationListener {
             pgConnection.addNotificationListener(new PGNotificationListener() {
                 @Override
                 public void notification(int processId, String channelName, String payload) {
-                    Insight insight = notificationParserService.parse(payload);
+                    Insight insight = notificationDtoParserService.parse(payload);
 
-                    if (insight == null) {
-                        return;
+                    if (insight != null) {
+                        messagingTemplate.convertAndSend("/notification/" + insight.getReceiver().getGoogleId(), insight);
+                        emailNotificationService.send(insight);
                     }
-
-                    messagingTemplate.convertAndSend("/notification/" + insight.getReceiver().getId(), insight);
-                    emailService.send(insight);
                 }
             });
         }

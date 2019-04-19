@@ -10,12 +10,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 @Service
-class EmailService {
+class EmailNotificationService {
 
     private final JavaMailSender mailSender;
 
     @Autowired
-    public EmailService(JavaMailSender mailSender) {
+    public EmailNotificationService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
