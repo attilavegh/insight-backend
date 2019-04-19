@@ -23,7 +23,7 @@ public class AuthUtils {
     }
 
     public static String extractGoogleId(String token) throws GeneralSecurityException {
-        GoogleIdToken validatedToken = TokenHandler.verifyToken(token);
+        GoogleIdToken validatedToken = TokenHandlerService.verifyToken(token);
 
         if (validatedToken != null) {
             return validatedToken.getPayload().getSubject();

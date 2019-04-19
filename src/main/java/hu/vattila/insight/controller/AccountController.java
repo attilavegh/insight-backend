@@ -2,9 +2,8 @@ package hu.vattila.insight.controller;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import hu.vattila.insight.authentication.AuthConstants;
 import hu.vattila.insight.authentication.AuthUtils;
-import hu.vattila.insight.authentication.TokenHandler;
+import hu.vattila.insight.authentication.TokenHandlerService;
 import hu.vattila.insight.entity.Account;
 import hu.vattila.insight.model.OneTimeAuthCode;
 import hu.vattila.insight.model.Token;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
@@ -27,10 +25,12 @@ import java.util.Optional;
 public class AccountController {
 
     private final AccountRepository accountRepository;
+    private final TokenHandlerService tokenHandlerService;
 
     @Autowired
-    public AccountController(AccountRepository accountRepository) {
+    public AccountController(AccountRepository accountRepository, TokenHandlerService tokenHandlerService) {
         this.accountRepository = accountRepository;
+        this.tokenHandlerService = tokenHandlerService;
     }
 
     @ExceptionHandler({Exception.class})
@@ -72,7 +72,7 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
 
-        GoogleTokenResponse tokenResponse = TokenHandler.exchangeAuthorizationCode(authCode);
+        GoogleTokenResponse tokenResponse = tokenHandlerService.exchangeAuthorizationCode(authCode);
 
         GoogleIdToken parsedIdToken = tokenResponse.parseIdToken();
         String googleId = parsedIdToken.getPayload().getSubject();
@@ -108,7 +108,7 @@ public class AccountController {
     }
 
     private String getRefreshedAuthToken(String token) {
-        GoogleTokenResponse tokenResponse = TokenHandler.refreshToken(token);
+        GoogleTokenResponse tokenResponse = TokenHandlerService.refreshToken(token);
         return tokenResponse != null ? tokenResponse.getIdToken() : null;
     }
 

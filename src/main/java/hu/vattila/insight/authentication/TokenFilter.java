@@ -39,7 +39,7 @@ public class TokenFilter extends BasicAuthenticationFilter {
     }
 
     private boolean isAuthTokenValid(String token) {
-        GoogleIdToken verifiedToken = TokenHandler.verifyToken(token);
+        GoogleIdToken verifiedToken = TokenHandlerService.verifyToken(token);
         return verifiedToken != null;
     }
 
