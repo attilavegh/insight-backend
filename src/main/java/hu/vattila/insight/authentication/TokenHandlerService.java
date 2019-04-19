@@ -3,7 +3,7 @@ package hu.vattila.insight.authentication;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import hu.vattila.insight.model.OneTimeAuthCode;
+import hu.vattila.insight.dto.OneTimeAuthCodeDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class TokenHandlerService {
     @Value("${auth.redirect.uri}")
     private String authRedirectUri;
 
-    public GoogleTokenResponse exchangeAuthorizationCode(OneTimeAuthCode authCode) throws IOException {
+    public GoogleTokenResponse exchangeAuthorizationCode(OneTimeAuthCodeDto authCode) throws IOException {
         return new GoogleAuthorizationCodeTokenRequest(
                 new NetHttpTransport(),
                 JacksonFactory.getDefaultInstance(),

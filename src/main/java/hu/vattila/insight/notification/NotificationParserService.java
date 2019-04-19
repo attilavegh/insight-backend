@@ -3,7 +3,7 @@ package hu.vattila.insight.notification;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.vattila.insight.entity.Account;
 import hu.vattila.insight.entity.Insight;
-import hu.vattila.insight.model.Notification;
+import hu.vattila.insight.dto.NotificationDto;
 import hu.vattila.insight.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,19 +20,19 @@ class NotificationParserService {
     private AccountRepository accountRepository;
 
     Insight parse(String payload) {
-        Notification notification = parseNotification(payload);
-        if (notification == null) {
+        NotificationDto notificationDto = parseNotification(payload);
+        if (notificationDto == null) {
             return null;
         }
 
         Insight insight = new Insight();
-        insight.setId(notification.getId());
-        insight.setContinueMessage(notification.getContinueMessage());
-        insight.setConsiderMessage(notification.getConsiderMessage());
-        insight.setDate(notification.getDate());
+        insight.setId(notificationDto.getId());
+        insight.setContinueMessage(notificationDto.getContinueMessage());
+        insight.setConsiderMessage(notificationDto.getConsiderMessage());
+        insight.setDate(notificationDto.getDate());
 
-        Account sender = getAccount(notification.getSender());
-        Account receiver = getAccount(notification.getReceiver());
+        Account sender = getAccount(notificationDto.getSender());
+        Account receiver = getAccount(notificationDto.getReceiver());
 
         if (sender == null || receiver == null) {
             return null;
@@ -44,11 +44,11 @@ class NotificationParserService {
         return insight;
     }
 
-    private Notification parseNotification(String payload) {
+    private NotificationDto parseNotification(String payload) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            return objectMapper.readValue(payload, Notification.class);
+            return objectMapper.readValue(payload, NotificationDto.class);
         } catch (IOException e) {
             return null;
         }

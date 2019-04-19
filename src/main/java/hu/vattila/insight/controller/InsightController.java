@@ -3,6 +3,7 @@ package hu.vattila.insight.controller;
 import hu.vattila.insight.authentication.AuthUtils;
 import hu.vattila.insight.entity.Account;
 import hu.vattila.insight.entity.Insight;
+import hu.vattila.insight.dto.InsightDto;
 import hu.vattila.insight.repository.AccountRepository;
 import hu.vattila.insight.repository.InsightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +36,7 @@ public class InsightController {
 
     @GetMapping("/sent/{senderId}")
     public ResponseEntity<List<Insight>> getSentInsights(@PathVariable("senderId") String senderGoogleId,
-                                                         @RequestHeader("Authorization") String token) throws GeneralSecurityException, IOException {
+                                                         @RequestHeader("Authorization") String token) throws GeneralSecurityException {
         String authorizedGoogleId = AuthUtils.extractGoogleId(token);
         Optional<Account> optionalAccount = accountRepository.findByGoogleId(authorizedGoogleId);
 
@@ -54,7 +54,7 @@ public class InsightController {
 
     @GetMapping("/received/{receiverId}")
     public ResponseEntity<List<Insight>> getReceivedInsights(@PathVariable("receiverId") String receiverId,
-                                                             @RequestHeader("Authorization") String token) throws GeneralSecurityException, IOException {
+                                                             @RequestHeader("Authorization") String token) throws GeneralSecurityException {
         String authorizedGoogleId = AuthUtils.extractGoogleId(token);
         Optional<Account> optionalAccount = accountRepository.findByGoogleId(authorizedGoogleId);
 
@@ -71,7 +71,27 @@ public class InsightController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity<Insight> saveInsight(@RequestBody Insight insight) {
+    public ResponseEntity<Insight> saveInsight(@RequestBody InsightDto insightDto,
+                                               @RequestHeader("Authorization") String token) throws GeneralSecurityException {
+        String authorizedGoogleId = AuthUtils.extractGoogleId(token);
+
+        if (!authorizedGoogleId.equals(insightDto.getSender()) || insightDto.getSender().equals(insightDto.getReceiver())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<Account> optionalSender = accountRepository.findByGoogleId(insightDto.getSender());
+        Optional<Account> optionalReceiver = accountRepository.findByGoogleId(insightDto.getReceiver());
+
+        if (!optionalSender.isPresent() || !optionalReceiver.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Insight insight = new Insight();
+        insight.setSender(optionalSender.get());
+        insight.setReceiver(optionalReceiver.get());
+        insight.setContinueMessage(insightDto.getContinueMessage());
+        insight.setConsiderMessage(insightDto.getConsiderMessage());
+
         return ResponseEntity.ok(insightRepository.save(insight));
     }
 }

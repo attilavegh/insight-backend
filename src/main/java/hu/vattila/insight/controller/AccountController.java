@@ -5,8 +5,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import hu.vattila.insight.authentication.AuthUtils;
 import hu.vattila.insight.authentication.TokenHandlerService;
 import hu.vattila.insight.entity.Account;
-import hu.vattila.insight.model.OneTimeAuthCode;
-import hu.vattila.insight.model.Token;
+import hu.vattila.insight.dto.OneTimeAuthCodeDto;
+import hu.vattila.insight.dto.TokenDto;
 import hu.vattila.insight.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +40,7 @@ public class AccountController {
 
     @GetMapping()
     public ResponseEntity<List<Account>> searchAccount(@RequestParam String fragment,
-                                                       @RequestHeader("Authorization") String token) throws GeneralSecurityException, IOException {
+                                                       @RequestHeader("Authorization") String token) throws GeneralSecurityException {
         if (fragment.equals("")) {
             return ResponseEntity.ok(Collections.emptyList());
         } else {
@@ -53,20 +53,8 @@ public class AccountController {
         }
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Account> getAccount(@PathVariable String id,
-                                              @RequestHeader("Authorization") String token) throws GeneralSecurityException, IOException {
-        String authorizedGoogleId = AuthUtils.extractGoogleId(token);
-        if (!authorizedGoogleId.equals(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Optional<Account> optionalAccount = accountRepository.findByGoogleId(id);
-        return optionalAccount.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<Token> login(@RequestBody OneTimeAuthCode authCode) throws IOException {
+    public ResponseEntity<TokenDto> login(@RequestBody OneTimeAuthCodeDto authCode) throws IOException {
 
         if (authCode == null) {
             return ResponseEntity.badRequest().build();
@@ -93,18 +81,18 @@ public class AccountController {
         String refreshToken = tokenResponse.getRefreshToken();
         String idToken = tokenResponse.getIdToken();
 
-        return ResponseEntity.ok(new Token(idToken, refreshToken));
+        return ResponseEntity.ok(new TokenDto(idToken, refreshToken));
     }
 
     @PostMapping("/refresh_token")
-    public ResponseEntity<Token> login(@RequestBody Token token) {
+    public ResponseEntity<TokenDto> login(@RequestBody TokenDto tokenDto) {
 
-        if (token == null || token.getRefreshToken() == null) {
+        if (tokenDto == null || tokenDto.getRefreshToken() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        String refreshedToken = getRefreshedAuthToken(token.getRefreshToken());
-        return refreshedToken != null ? ResponseEntity.ok(new Token(refreshedToken, token.getRefreshToken())) : ResponseEntity.badRequest().build();
+        String refreshedToken = getRefreshedAuthToken(tokenDto.getRefreshToken());
+        return refreshedToken != null ? ResponseEntity.ok(new TokenDto(refreshedToken, tokenDto.getRefreshToken())) : ResponseEntity.badRequest().build();
     }
 
     private String getRefreshedAuthToken(String token) {

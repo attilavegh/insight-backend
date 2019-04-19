@@ -1,4 +1,4 @@
-package hu.vattila.insight.model;
+package hu.vattila.insight.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Notification {
+public class NotificationDto {
     private Integer id;
     @JsonAlias({"continue_message"})
     private String continueMessage;

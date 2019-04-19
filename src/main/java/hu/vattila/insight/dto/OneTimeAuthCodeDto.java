@@ -1,4 +1,4 @@
-package hu.vattila.insight.model;
+package hu.vattila.insight.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Token {
-    String idToken;
-    String refreshToken;
+public class OneTimeAuthCodeDto {
+    String code;
 }
