@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 @Service
@@ -49,7 +51,7 @@ public class TokenHandlerService {
                     refreshToken,
                     AuthConstants.CLIENT_ID.getValue(),
                     AuthConstants.CLIENT_SECRET.getValue()
-            ).execute();
+            ).setScopes(Collections.singletonList("profile")).execute();
         } catch (IOException e) {
             return null;
         }
