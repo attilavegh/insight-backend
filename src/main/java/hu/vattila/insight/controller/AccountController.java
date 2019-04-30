@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = {"https://elte-insight.firebaseapp.com", "http://localhost:4200"})
 @RestController
@@ -44,7 +42,7 @@ public class AccountController {
         if (fragment.equals("")) {
             return ResponseEntity.ok(Collections.emptyList());
         } else {
-            List<Account> accounts = accountRepository.findAllByFirstNameStartingWithIgnoreCaseOrLastNameStartingWithIgnoreCase(fragment, fragment);
+            List<Account> accounts = accountRepository.searchUser(fragment);
 
             String userId = AuthUtils.extractGoogleId(token);
             accounts.removeIf(account -> account.getGoogleId().equals(userId));
