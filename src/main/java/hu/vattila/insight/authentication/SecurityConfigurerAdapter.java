@@ -16,6 +16,7 @@ public class SecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
+                        AuthConstants.STATIC_IMG.getValue(),
                         AuthConstants.WS_ENDPOINT.getValue(),
                         AuthConstants.LOGIN_ENDPOINT.getValue(),
                         AuthConstants.REFRESH_ENDPOINT.getValue()).permitAll()
