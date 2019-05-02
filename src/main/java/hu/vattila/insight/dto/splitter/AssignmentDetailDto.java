@@ -1,4 +1,4 @@
-package hu.vattila.insight.dto;
+package hu.vattila.insight.dto.splitter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class OneTimeAuthCodeDto {
-    String code;
+public class AssignmentDetailDto {
+    String googleId;
+    BrowserType browserType;
 }

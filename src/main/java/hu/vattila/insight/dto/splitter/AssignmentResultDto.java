@@ -1,4 +1,4 @@
-package hu.vattila.insight.dto;
+package hu.vattila.insight.dto.splitter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class TokenDto {
-    String idToken;
-    String refreshToken;
+public class AssignmentResultDto {
+    String experimentName;
+    String bucketName;
 }

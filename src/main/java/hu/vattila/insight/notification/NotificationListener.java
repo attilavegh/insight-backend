@@ -3,6 +3,8 @@ package hu.vattila.insight.notification;
 import com.impossibl.postgres.api.jdbc.PGConnection;
 import com.impossibl.postgres.api.jdbc.PGNotificationListener;
 import hu.vattila.insight.entity.Insight;
+import hu.vattila.insight.service.notification.EmailNotificationService;
+import hu.vattila.insight.service.notification.NotificationDtoParserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 

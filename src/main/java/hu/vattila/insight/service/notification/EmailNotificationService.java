@@ -1,4 +1,4 @@
-package hu.vattila.insight.notification;
+package hu.vattila.insight.service.notification;
 
 import hu.vattila.insight.entity.Insight;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 @Service
-class EmailNotificationService {
+public class EmailNotificationService {
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
@@ -23,7 +23,7 @@ class EmailNotificationService {
         this.templateEngine = templateEngine;
     }
 
-    void send(Insight insight) {
+    public void send(Insight insight) {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 

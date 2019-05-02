@@ -31,10 +31,10 @@ public class Insight implements Serializable {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name="sender", referencedColumnName = "googleId", nullable=false)
+    @JoinColumn(name = "sender", referencedColumnName = "googleId", nullable = false)
     private Account sender;
 
     @ManyToOne
-    @JoinColumn(name="receiver", referencedColumnName = "googleId", nullable=false)
+    @JoinColumn(name = "receiver", referencedColumnName = "googleId", nullable = false)
     private Account receiver;
 }

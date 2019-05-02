@@ -1,4 +1,4 @@
-package hu.vattila.insight.notification;
+package hu.vattila.insight.service.notification;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.vattila.insight.entity.Account;
@@ -14,12 +14,12 @@ import java.util.Optional;
 
 @Transactional
 @Service
-class NotificationDtoParserService {
+public class NotificationDtoParserService {
 
     @Autowired
     private AccountRepository accountRepository;
 
-    Insight parse(String payload) {
+    public Insight parse(String payload) {
         NotificationDto notificationDto = parseNotification(payload);
         if (notificationDto == null) {
             return null;

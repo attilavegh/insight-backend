@@ -1,6 +1,7 @@
 package hu.vattila.insight.authentication;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import hu.vattila.insight.dto.authentication.AuthConstants;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

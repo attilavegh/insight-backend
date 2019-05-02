@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -45,9 +45,9 @@ public class Account implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy="sender")
-    private Set<Insight> sentInsights;
+    private List<Insight> sentInsights;
 
     @JsonIgnore
     @OneToMany(mappedBy="receiver")
-    private Set<Insight> receivedInsights;
+    private List<Insight> receivedInsights;
 }

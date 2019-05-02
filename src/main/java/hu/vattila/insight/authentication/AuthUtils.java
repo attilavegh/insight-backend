@@ -2,6 +2,7 @@ package hu.vattila.insight.authentication;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
+import hu.vattila.insight.dto.authentication.AuthConstants;
 import hu.vattila.insight.entity.Account;
 
 import java.security.GeneralSecurityException;
