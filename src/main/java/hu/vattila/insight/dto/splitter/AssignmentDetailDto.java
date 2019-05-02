@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class AssignmentDetailDto {
     String googleId;
-    BrowserType browserType;
+    DeviceType deviceType;
 }

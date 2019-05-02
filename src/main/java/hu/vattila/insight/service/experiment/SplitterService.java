@@ -32,13 +32,13 @@ public class SplitterService {
         List<Experiment> experiments = experimentRepository.findAll();
 
         return experiments.stream()
-                .filter(experiment -> hasRelevantBrowserType(experiment, assignmentDetail))
+                .filter(experiment -> hasRelevantDeviceType(experiment, assignmentDetail))
                 .map(experiment -> createAssignmentResult(experiment, assignmentDetail))
                 .collect(toList());
     }
 
-    private boolean hasRelevantBrowserType(Experiment experiment, AssignmentDetailDto assignmentDetail) {
-        return experiment.getBrowserType().equals(assignmentDetail.getBrowserType());
+    private boolean hasRelevantDeviceType(Experiment experiment, AssignmentDetailDto assignmentDetail) {
+        return experiment.getDeviceType().equals(assignmentDetail.getDeviceType());
     }
 
     private AssignmentResultDto createAssignmentResult(Experiment experiment, AssignmentDetailDto assignmentDetail) {

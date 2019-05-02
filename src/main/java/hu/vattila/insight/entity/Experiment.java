@@ -1,7 +1,6 @@
 package hu.vattila.insight.entity;
 
-import hu.vattila.insight.dto.splitter.AssignmentDetailDto;
-import hu.vattila.insight.dto.splitter.BrowserType;
+import hu.vattila.insight.dto.splitter.DeviceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +29,7 @@ public class Experiment implements Serializable {
     @Column
     @NotNull
     @Enumerated(EnumType.STRING)
-    private BrowserType BrowserType;
+    private DeviceType DeviceType;
 
     @OneToMany(mappedBy = "experiment", cascade = CascadeType.ALL)
     private List<Bucket> buckets;
