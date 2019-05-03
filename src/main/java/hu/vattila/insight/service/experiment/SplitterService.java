@@ -63,6 +63,6 @@ public class SplitterService {
     }
 
     private String createSaltedUserId(Experiment experiment, AssignmentDetailDto assignmentDetail) {
-        return assignmentDetail.getGoogleId() + experiment.getId();
+        return assignmentDetail.getGoogleId() + experiment.getName() + experiment.getId();
     }
 }
