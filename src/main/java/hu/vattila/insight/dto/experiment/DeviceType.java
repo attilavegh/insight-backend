@@ -1,4 +1,4 @@
-package hu.vattila.insight.dto.splitter;
+package hu.vattila.insight.dto.experiment;
 
 public enum DeviceType {
     MOBILE, TABLET, DESKTOP

@@ -1,8 +1,8 @@
 package hu.vattila.insight.controller;
 
-import hu.vattila.insight.dto.splitter.AssignmentDetailDto;
-import hu.vattila.insight.dto.splitter.AssignmentResultDto;
-import hu.vattila.insight.service.experiment.SplitterService;
+import hu.vattila.insight.dto.experiment.AssignmentDetailDto;
+import hu.vattila.insight.dto.experiment.AssignmentResultDto;
+import hu.vattila.insight.service.experiment.ExperimentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ import java.util.List;
 @RequestMapping("/api/experiment")
 public class ExperimentController {
 
-    private final SplitterService splitterService;
+    private final ExperimentService experimentService;
 
     @Autowired
-    public ExperimentController(SplitterService splitterService) {
-        this.splitterService = splitterService;
+    public ExperimentController(ExperimentService experimentService) {
+        this.experimentService = experimentService;
     }
 
     @ExceptionHandler({Exception.class})
@@ -28,7 +28,7 @@ public class ExperimentController {
     }
 
     @PostMapping("/assign")
-    public ResponseEntity<List<AssignmentResultDto>> login(@RequestBody AssignmentDetailDto assignmentDetailDto) {
-        return ResponseEntity.ok(splitterService.assign(assignmentDetailDto));
+    public ResponseEntity<List<AssignmentResultDto>> assign(@RequestBody AssignmentDetailDto assignmentDetailDto) {
+        return ResponseEntity.ok(experimentService.assign(assignmentDetailDto));
     }
 }

@@ -1,7 +1,7 @@
 package hu.vattila.insight.service.experiment;
 
-import hu.vattila.insight.dto.splitter.AssignmentDetailDto;
-import hu.vattila.insight.dto.splitter.AssignmentResultDto;
+import hu.vattila.insight.dto.experiment.AssignmentDetailDto;
+import hu.vattila.insight.dto.experiment.AssignmentResultDto;
 import hu.vattila.insight.entity.Bucket;
 import hu.vattila.insight.entity.Experiment;
 import hu.vattila.insight.repository.ExperimentRepository;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class SplitterService {
+public class ExperimentService {
 
     private static final int HUNDRED_PERCENT = 100;
 
@@ -23,7 +23,7 @@ public class SplitterService {
     private final HashService hashService;
 
     @Autowired
-    public SplitterService(ExperimentRepository experimentRepository, HashService hashService) {
+    public ExperimentService(ExperimentRepository experimentRepository, HashService hashService) {
         this.experimentRepository = experimentRepository;
         this.hashService = hashService;
     }

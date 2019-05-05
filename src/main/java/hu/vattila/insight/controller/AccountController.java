@@ -42,7 +42,7 @@ public class AccountController {
         if (fragment.equals("")) {
             return ResponseEntity.ok(Collections.emptyList());
         } else {
-            List<Account> accounts = accountRepository.searchUser(fragment);
+            List<Account> accounts = accountRepository.searchAccount(fragment);
 
             String userId = AuthUtils.extractGoogleId(token);
             accounts.removeIf(account -> account.getGoogleId().equals(userId));
@@ -83,7 +83,7 @@ public class AccountController {
     }
 
     @PostMapping("/refresh_token")
-    public ResponseEntity<TokenDto> login(@RequestBody TokenDto tokenDto) {
+    public ResponseEntity<TokenDto> refreshToken(@RequestBody TokenDto tokenDto) {
 
         if (tokenDto == null || tokenDto.getRefreshToken() == null) {
             return ResponseEntity.badRequest().build();

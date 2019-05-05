@@ -17,5 +17,5 @@ public interface AccountRepository extends CrudRepository<Account, Integer> {
             "OR LOWER(CONCAT(LAST_NAME, ' ', FIRST_NAME)) LIKE CONCAT(LOWER(?1), '%')",
             nativeQuery = true
     )
-    List<Account> searchUser(String fragment);
+    List<Account> searchAccount(String fragment);
 }

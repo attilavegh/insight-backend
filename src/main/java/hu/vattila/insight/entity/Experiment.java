@@ -1,6 +1,6 @@
 package hu.vattila.insight.entity;
 
-import hu.vattila.insight.dto.splitter.DeviceType;
+import hu.vattila.insight.dto.experiment.DeviceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
