@@ -2,7 +2,6 @@ package hu.vattila.insight.authentication;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
-import hu.vattila.insight.dto.authentication.AuthConstants;
 import hu.vattila.insight.entity.Account;
 
 import java.security.GeneralSecurityException;
@@ -31,10 +30,6 @@ public class AuthUtils {
         } else {
             throw new GeneralSecurityException();
         }
-    }
-
-    public static boolean isAuthToken(String token) {
-        return token.startsWith(AuthConstants.TOKEN_PREFIX.getValue());
     }
 
     public static String parseToken(String token) {

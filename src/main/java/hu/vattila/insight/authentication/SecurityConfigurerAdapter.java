@@ -1,6 +1,5 @@
 package hu.vattila.insight.authentication;
 
-import hu.vattila.insight.dto.authentication.AuthConstants;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;

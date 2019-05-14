@@ -54,6 +54,7 @@ public class ExperimentService {
 
         for (Bucket bucket : experiment.getBuckets()) {
             assignmentValue -= bucket.getPercentage();
+
             if (assignmentValue < 0) {
                 return Optional.of(bucket.getName());
             }

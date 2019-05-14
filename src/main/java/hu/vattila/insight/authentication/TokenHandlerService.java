@@ -3,7 +3,6 @@ package hu.vattila.insight.authentication;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import hu.vattila.insight.dto.authentication.AuthConstants;
 import hu.vattila.insight.dto.authentication.OneTimeAuthCodeDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
