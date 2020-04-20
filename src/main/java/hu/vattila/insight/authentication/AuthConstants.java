@@ -9,8 +9,8 @@ public enum AuthConstants {
     STATIC_IMG("/img/**"),
 
     TOKEN_SERVER_URL("https://www.googleapis.com/oauth2/v4/token"),
-    CLIENT_ID("***REMOVED***"),
-    CLIENT_SECRET("***REMOVED***");
+    CLIENT_ID(System.getenv("CLIENT_ID")),
+    CLIENT_SECRET(System.getenv("CLIENT_SECRET"));
 
     private final String value;
 
